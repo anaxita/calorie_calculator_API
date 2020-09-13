@@ -16,7 +16,6 @@ class ProductController extends Controller
     {
         $this->authorizeResource(Product::class, 'product');
         $this->productRepository = $productRepository;
-        Resp
     }
 
     /**
