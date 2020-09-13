@@ -12,6 +12,12 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function addProduct(Request $request)
     {
+        $request->validate([
+            'name' => 'required|min:3|max:20',
+            'product_num' => 'required|int',
+            'calorie_num' => 'required|int',
+            'counting_type' => 'required'
+        ]);
         $user = $request->user(); //Получаем пользователя из токена
 
         if ($request->get('counting_type')) { // высчитываем количество калорий в зависимости от типа
@@ -20,7 +26,7 @@ class ProductRepository implements ProductRepositoryInterface
             $calorie_total = $request->get('product_num') * $request->get('calorie_num') / 100; // a * b / 100
         }
 
-        $newProduct = Product::create([ //Добавляем продукт в БД и айди юзера в поле user_id
+        return  Product::create([ //Добавляем продукт в БД и айди юзера в поле user_id
             'name' => $request->get('name'),
             'product_num' => $request->get('product_num'),
             'calorie_num' => $request->get('calorie_num'),
@@ -29,6 +35,5 @@ class ProductRepository implements ProductRepositoryInterface
             'user_id' => $user->id
         ]);
 
-        return $newProduct;
     }
 }

@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SigninController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     *
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -16,6 +21,9 @@ class SigninController extends Controller
             'password' => 'required|min:6'
         ]);
 
+        /**
+         * @var User $user
+         */
         $user = User::where('email', $request->get('email'))->first();
         if (!$user || !Hash::check($request->get('password'), $user->password)) {
             return response(

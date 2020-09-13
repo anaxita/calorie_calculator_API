@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/adduser', 'AdduserController@adduser')->middleware('json');
-Route::post('/signin', 'SigninController@login')->middleware('json');
+Route::post('/signin', 'SigninController@login')->middleware('json')->name('signin');
 Route::apiResource('products', 'ProductController')->middleware(['auth:sanctum', 'json']);
 

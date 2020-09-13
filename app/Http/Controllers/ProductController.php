@@ -39,14 +39,8 @@ class ProductController extends Controller
      */
     public function store(Request $request) // Добавить новый продукт  /api/products POST
     {
-        $request->validate([
-            'name' => 'required|min:3|max:20',
-            'product_num' => 'required|int',
-            'calorie_num' => 'required|int',
-            'counting_type' => 'required'
-        ]);
-        $newProduct = $this->productRepository->addProduct($request);
-        $data = new ProductResource($newProduct); // передаем созданный продукт в ресурс который вернёт id и посчитанные калории созданного продукта
+        $product = $this->productRepository->addProduct($request);
+        $data = new ProductResource($product); // передаем созданный продукт в ресурс который вернёт id и посчитанные калории созданного продукта
         return response($data, Response::HTTP_CREATED);
     }
 
@@ -71,7 +65,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product) // products/23 PATCH
     {
-
         $product->update([
             'name' => $request->name,
             'amount' => $request->amount,
