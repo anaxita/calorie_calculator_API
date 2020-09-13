@@ -24,7 +24,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request) //  Список продуктов /api/products GET
     {
         $user = $request->user();
         return \response(new ProductsCollection($user->products), 200);
@@ -69,7 +69,7 @@ class ProductController extends Controller
      * @param \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product) // products/23
+    public function update(Request $request, Product $product) // products/23 PATCH
     {
 
         $product->update([
