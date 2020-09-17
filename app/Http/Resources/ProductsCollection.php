@@ -24,11 +24,10 @@ class ProductsCollection extends ResourceCollection
                     'product_num' => $v->product_num,
                     'calorie_num' => $v->calorie_num,
                     'counting_type' => $v->counting_type,
-                    'calorie_total' => $v->calorie_total];
+                    'calorie_total' => $v->calorie_total
+                ];
             })->toArray(),
-                'count' => $this->collection->count()
-            ];
-
+            'count' => $this->collection->count()
+        ];
     }
 }
-

@@ -6,6 +6,7 @@ use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductsCollection;
+use App\Http\Resources\StatisticCollection;
 use App\Repositories\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -84,7 +85,29 @@ class ProductController extends Controller
     public function destroy(Product $product) //products/10 DELETE
     {
         $product->delete();
-            return \response(['message' => 'deleted'
+            return response(['message' => 'deleted'
             ], Response::HTTP_ACCEPTED);
     }
+
+    /**
+     * Get products list by some period
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    
+     public function getStatistic(Request $request)
+     {
+         $request->validate([
+             'start_date' => 'required',
+             'end_date' => 'required'
+         ]);
+            $request->user()->products;
+        $products = $this->productRepository->getStatistic(
+            $request->user(),
+            $request->get('start_date'),
+            $request->get('end_date')
+        );
+        return response(new StatisticCollection($products), Response::HTTP_OK);
+     }
 }

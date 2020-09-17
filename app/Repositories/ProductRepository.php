@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Product;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductRepository implements ProductRepositoryInterface
@@ -34,6 +35,12 @@ class ProductRepository implements ProductRepositoryInterface
             'calorie_total' => round($calorie_total),
             'user_id' => $user->id
         ]);
+    }
 
+    public function getStatistic($user, $start_date, $end_date)
+    {
+        $start_date = Carbon::createFromFormat('Y-m-d', $start_date);
+        $end_date = Carbon::createFromFormat('Y-m-d', $end_date)->setTime(23, 59, 59);
+        return $user->products()->whereBetween('created_at', [$start_date, $end_date])->get();
     }
 }
