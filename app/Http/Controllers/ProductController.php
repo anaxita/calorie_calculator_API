@@ -66,13 +66,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product) // products/23 PATCH
     {
-        $product->update([
-            'name' => $request->name,
-            'amount' => $request->amount,
-            'callories' => $request->callories
-        ]);
-        return \response(['message' => 'updated'
-        ], Response::HTTP_ACCEPTED);
+        $calorie_total = $this->productRepository->editProduct($request, $product);
+        return \response($calorie_total, Response::HTTP_OK);
     }
 
     /**
@@ -85,8 +80,7 @@ class ProductController extends Controller
     public function destroy(Product $product) //products/10 DELETE
     {
         $product->delete();
-            return response(['message' => 'deleted'
-            ], Response::HTTP_ACCEPTED);
+        return response(['message' => 'deleted'], Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -95,19 +89,19 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    
-     public function getStatistic(Request $request)
-     {
-         $request->validate([
-             'start_date' => 'required',
-             'end_date' => 'required'
-         ]);
-            $request->user()->products;
+
+    public function getStatistic(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required'
+        ]);
+        $request->user()->products;
         $products = $this->productRepository->getStatistic(
             $request->user(),
             $request->get('start_date'),
             $request->get('end_date')
         );
         return response(new StatisticCollection($products), Response::HTTP_OK);
-     }
+    }
 }

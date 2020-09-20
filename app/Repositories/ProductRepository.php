@@ -37,6 +37,32 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
+    public function editProduct(Request $request, Product $product)
+    {
+        $request->validate([
+            'name' => 'required|string|min:3|max:20',
+            'product_num' => 'required|int|min:1|max:10000',
+            'calorie_num' => 'required|int|min:1|max:10000',
+            'counting_type' => 'required|bool'
+        ]);
+
+        if ($request->get('counting_type')) { // высчитываем количество калорий в зависимости от типа
+            $calorie_total = $request->get('calorie_num');
+        } else {
+            $calorie_total = $request->get('product_num') * $request->get('calorie_num') / 100; // a * b / 100
+        }
+
+        $product->update([
+            'name' => $request->get('name'),
+            'product_num' => $request->get('product_num'),
+            'calorie_num' => $request->get('calorie_num'),
+            'counting_type' => $request->get('counting_type'),
+            'calorie_total' => round($calorie_total),
+        ]);
+
+        return $calorie_total;
+    }
+
     public function getStatistic($user, $start_date, $end_date)
     {
         $start_date = Carbon::createFromFormat('Y-m-d', $start_date);
