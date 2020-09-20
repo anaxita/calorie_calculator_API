@@ -67,7 +67,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product) // products/23 PATCH
     {
         $calorie_total = $this->productRepository->editProduct($request, $product);
-        return \response($calorie_total, Response::HTTP_OK);
+        return \response(['calorie_total' => $calorie_total], Response::HTTP_OK);
     }
 
     /**
