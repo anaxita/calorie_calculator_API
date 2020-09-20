@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Auth\Events\Registered;
 
 class AdduserController extends Controller
 {
@@ -18,25 +20,23 @@ class AdduserController extends Controller
 
         $user = User::where('email', $request->get('email'))->first();
         if ($user) {
-            return response(
-                [
-                    'message' => 'Пользователь с таким email уже существует',
-                    ],
-                Response::HTTP_UNAUTHORIZED
-            );
+            return response(['message' => 'Пользователь с таким email уже существует',], Response::HTTP_UNAUTHORIZED);
         } else {
-             User::create([
+            $password = $request->get('password');
+            $newUser = User::create([
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
-                'password' => Hash::make($request->get('password'))
+                'password' => Hash::make($password)
             ]);
 
-             return response([
-                 'message' => 'created',
-             ],
-            Response::HTTP_CREATED
-        );
+            event(new Registered($newUser));
 
+            return response(
+                [
+                    'message' => 'created',
+                ],
+                Response::HTTP_CREATED
+            );
         }
     }
 }

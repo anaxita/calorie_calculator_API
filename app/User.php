@@ -14,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @property Collection $products
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
 
@@ -25,7 +25,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'name', 'email'
+        'name', 'email', 'password',
     ];
 
     /**

@@ -19,6 +19,6 @@ class Product extends Model
      */
 
     protected $fillable = [
-        'name', 'product_num', 'calorie_num', 'counting_type', 'calorie_total', 'user_id'
+        'name', 'product_num', 'calorie_num', 'counting_type', 'calorie_total', 'user_id',
     ];
 }

@@ -8,6 +8,9 @@ class Authenticate extends Middleware
 {
 protected  function unauthenticated($request, array $guards)
 {
-    throw new UnauthorizedHttpException('invalid token', 'Token is invalid');
+    if (! $request->expectsJson()) {
+        //return route('home');
+        throw new UnauthorizedHttpException('invalid token', 'Token is invalid');
+    }
 }
 }
