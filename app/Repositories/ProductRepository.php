@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Product;
+use App\User;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -65,8 +66,17 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getStatistic($user, $start_date, $end_date)
     {
-        $start_date = Carbon::createFromFormat('Y-m-d', $start_date);
+        $start_date = Carbon::createFromFormat('Y-m-d', $start_date)->setTime(00, 00, 00);
         $end_date = Carbon::createFromFormat('Y-m-d', $end_date)->setTime(23, 59, 59);
-        return $user->products()->whereBetween('created_at', [$start_date, $end_date])->get();
+        $days = $start_date->diff($end_date)->days + 1;
+
+        if (!$user->products()->whereBetween('created_at', [$start_date, $end_date])->count() || ($start_date->gt($end_date))) {
+            return [];
+        }
+
+        return [
+            'products' => $user->products()->whereBetween('created_at', [$start_date, $end_date])->orderBy('created_at')->get(),
+            'days' => $days
+        ];
     }
 }

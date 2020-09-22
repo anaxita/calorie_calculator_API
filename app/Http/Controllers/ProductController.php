@@ -92,16 +92,14 @@ class ProductController extends Controller
 
     public function getStatistic(Request $request)
     {
-        $request->validate([
-            'start_date' => 'required',
-            'end_date' => 'required'
-        ]);
-        $request->user()->products;
         $products = $this->productRepository->getStatistic(
             $request->user(),
             $request->get('start_date'),
             $request->get('end_date')
         );
+        if (!$products) {
+            return response(['no products'], Response::HTTP_OK);
+        }
         return response(new StatisticCollection($products), Response::HTTP_OK);
     }
 }
