@@ -27,8 +27,7 @@ class ProductController extends Controller
      */
     public function index(Request $request) //  Список продуктов /api/products GET
     {
-        $user = $request->user();
-        return \response(new ProductsCollection($user->products), 200);
+        return \response(new ProductsCollection($request->user()->products), 200);
     }
 
 
@@ -41,8 +40,7 @@ class ProductController extends Controller
     public function store(Request $request) // Добавить новый продукт  /api/products POST
     {
         $product = $this->productRepository->addProduct($request);
-        $data = new ProductResource($product); // передаем созданный продукт в ресурс который вернёт id и посчитанные калории созданного продукта
-        return response($data, Response::HTTP_CREATED);
+        return response(new ProductResource($product), Response::HTTP_CREATED);
     }
 
     /**
@@ -80,7 +78,7 @@ class ProductController extends Controller
     public function destroy(Product $product) //products/10 DELETE
     {
         $product->delete();
-        return response(['message' => 'deleted'], Response::HTTP_ACCEPTED);
+        return response(['message' => 'deleted'], Response::HTTP_OK);
     }
 
     /**

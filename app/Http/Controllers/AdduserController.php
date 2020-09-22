@@ -21,22 +21,15 @@ class AdduserController extends Controller
         $user = User::where('email', $request->get('email'))->first();
         if ($user) {
             return response(['message' => 'Пользователь с таким email уже существует',], Response::HTTP_UNAUTHORIZED);
-        } else {
-            $password = $request->get('password');
-            $newUser = User::create([
-                'name' => $request->get('name'),
-                'email' => $request->get('email'),
-                'password' => Hash::make($password)
-            ]);
-
-            event(new Registered($newUser));
-
-            return response(
-                [
-                    'message' => 'created',
-                ],
-                Response::HTTP_CREATED
-            );
         }
+        $password = $request->get('password');
+        $newUser = User::create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($password)
+        ]);
+
+        event(new Registered($newUser));
+        return response(['message' => 'created',], Response::HTTP_CREATED);
     }
 }
